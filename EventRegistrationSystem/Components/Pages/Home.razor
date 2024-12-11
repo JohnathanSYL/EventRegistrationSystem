@@ -1,0 +1,44 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Web
+@inject NavigationManager NavigationManager
+
+<h1 class="text-center mt-4">Welcome to EventSync!</h1>
+
+<p class="text-center fs-5">A Seamless Registration Experience for Guests and Organizers</p>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title">🎉 Featured Events</h4>
+                    <p class="card-text">Check out the latest and trending events!</p>
+                    <button class="btn btn-primary w-100" @onclick="NavigateToEvents">Explore Events</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h4 class="card-title">📝 Register for an Account</h4>
+                    <p class="card-text">Sign up for an account to reserve your spot at events and stay informed about the latest happenings and exclusive offers.</p>
+                    <button class="btn btn-warning w-100" @onclick="NavigateToRegister">Register Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private void NavigateToEvents()
+    {
+        NavigationManager.NavigateTo("/events");
+    }
+
+    private void NavigateToRegister()
+    {
+        NavigationManager.NavigateTo("/register");
+    }
+}
+
