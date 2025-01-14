@@ -1,0 +1,134 @@
+﻿@page "/users/edit"
+@using Microsoft.EntityFrameworkCore
+@using EventRegistrationSystem.Domain
+@inject IDbContextFactory<EventRegistrationSystem.Data.EventRegistrationSystemContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Users</h2>
+<hr />
+@if (Users is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Users" OnValidSubmit="UpdateUsers" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Users.Id" value="@Users.Id" />
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <InputText id="name" @bind-Value="Users.Name" class="form-control" />
+                    <ValidationMessage For="() => Users.Name" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <InputText id="email" @bind-Value="Users.Email" class="form-control" />
+                    <ValidationMessage For="() => Users.Email" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <InputText id="password" @bind-Value="Users.Password" class="form-control" />
+                    <ValidationMessage For="() => Users.Password" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="phonenumber" class="form-label">PhoneNumber:</label>
+                    <InputNumber id="phonenumber" @bind-Value="Users.PhoneNumber" class="form-control" />
+                    <ValidationMessage For="() => Users.PhoneNumber" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="role" class="form-label">Role:</label>
+                    <InputText id="role" @bind-Value="Users.Role" class="form-control" />
+                    <ValidationMessage For="() => Users.Role" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="preferences" class="form-label">Preferences:</label>
+                    <InputText id="preferences" @bind-Value="Users.Preferences" class="form-control" />
+                    <ValidationMessage For="() => Users.Preferences" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="datecreated" class="form-label">DateCreated:</label>
+                    <InputDate id="datecreated" @bind-Value="Users.DateCreated" class="form-control" />
+                    <ValidationMessage For="() => Users.DateCreated" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="dateupdated" class="form-label">DateUpdated:</label>
+                    <InputDate id="dateupdated" @bind-Value="Users.DateUpdated" class="form-control" />
+                    <ValidationMessage For="() => Users.DateUpdated" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="createdby" class="form-label">CreatedBy:</label>
+                    <InputText id="createdby" @bind-Value="Users.CreatedBy" class="form-control" />
+                    <ValidationMessage For="() => Users.CreatedBy" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="updatedby" class="form-label">UpdatedBy:</label>
+                    <InputText id="updatedby" @bind-Value="Users.UpdatedBy" class="form-control" />
+                    <ValidationMessage For="() => Users.UpdatedBy" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/users">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Users? Users { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Users ??= await context.Users.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (Users is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateUsers()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Users!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!UsersExists(Users!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/users");
+    }
+
+    private bool UsersExists(int id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Users.Any(e => e.Id == id);
+    }
+}
