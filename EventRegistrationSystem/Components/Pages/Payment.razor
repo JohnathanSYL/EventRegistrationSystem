@@ -1,0 +1,75 @@
+﻿@page "/payment"
+@using System.ComponentModel.DataAnnotations
+
+<h3>Payment Checkout</h3>
+
+<EditForm Model="@paymentModel" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="cardNumber">Card Number</label>
+        <InputText id="cardNumber" class="form-control" @bind-Value="paymentModel.CardNumber" />
+        <ValidationMessage For="@(() => paymentModel.CardNumber)" />
+    </div>
+
+    <div class="form-group">
+        <label for="expirationDate">Expiration Date (MM/YY)</label>
+        <InputText id="expirationDate" class="form-control" @bind-Value="paymentModel.ExpirationDate" />
+        <ValidationMessage For="@(() => paymentModel.ExpirationDate)" />
+    </div>
+
+    <div class="form-group">
+        <label for="cvv">CVV</label>
+        <InputText id="cvv" class="form-control" @bind-Value="paymentModel.CVV" />
+        <ValidationMessage For="@(() => paymentModel.CVV)" />
+    </div>
+
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <InputNumber id="amount" class="form-control" @bind-Value="paymentModel.Amount" />
+        <ValidationMessage For="@(() => paymentModel.Amount)" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit Payment</button>
+    </div>
+</EditForm>
+
+@if (paymentResult != null)
+{
+    <div class="alert alert-info">
+        @paymentResult
+    </div>
+}
+
+@code {
+    private PaymentModel paymentModel = new PaymentModel();
+    private string paymentResult;
+
+    private void HandleSubmit()
+    {
+        // Handle form submission (e.g., call a payment service or API)
+        // For now, let's simulate a successful payment.
+        paymentResult = $"Payment of ${paymentModel.Amount} was successful!";
+    }
+
+    public class PaymentModel
+    {
+        [Required(ErrorMessage = "Card number is required")]
+        [StringLength(16, MinimumLength = 16, ErrorMessage = "Card number must be 16 digits.")]
+        public string CardNumber { get; set; }
+
+        [Required(ErrorMessage = "Expiration date is required")]
+        [RegularExpression(@"^(0[1-9]|1[0-2])\/\d{2}$", ErrorMessage = "Expiration date must be in MM/YY format.")]
+        public string ExpirationDate { get; set; }
+
+        [Required(ErrorMessage = "CVV is required")]
+        [StringLength(3, MinimumLength = 3, ErrorMessage = "CVV must be 3 digits.")]
+        public string CVV { get; set; }
+
+        [Required(ErrorMessage = "Amount is required")]
+        [Range(1, 10000, ErrorMessage = "Amount must be between $1 and $10,000.")]
+        public decimal Amount { get; set; }
+    }
+}
