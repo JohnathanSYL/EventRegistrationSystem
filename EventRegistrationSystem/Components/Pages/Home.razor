@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <h4 class="card-title">🎉 Featured Events</h4>
                     <p class="card-text">Check out the latest and trending events!</p>
-                    <button class="btn btn-primary w-100" @onclick="NavigateToEvents">Explore Events</button>
+                    <button> <NavLink class="btn btn-primary w-100" href="/events">Explore Events</NavLink></button>
                 </div>
             </div>
         </div>
@@ -23,7 +23,8 @@
                 <div class="card-body text-center">
                     <h4 class="card-title">📝 Register for an Account</h4>
                     <p class="card-text">Sign up for an account to reserve your spot at events and stay informed about the latest happenings and exclusive offers.</p>
-                    <button class="btn btn-warning w-100" @onclick="NavigateToRegister">Register Now</button>
+                    
+                    <button> <NavLink class="btn btn-primary w-100" href="/register">Register Now</NavLink></button>
                 </div>
             </div>
         </div>
