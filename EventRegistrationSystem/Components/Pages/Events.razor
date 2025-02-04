@@ -15,7 +15,7 @@
                         <h5 class="card-title">@eventItem.Name</h5>
                         <p class="card-text">@eventItem.Description</p>
                         <p class="card-text"><strong>Date:</strong> @eventItem.Date.ToString("MMMM dd, yyyy")</p>
-                        <a href="@eventItem.Link" class="btn btn-primary w-100" target="_blank">Explore Event</a>
+                        <a href="@eventItem.Link" class="btn btn-primary w-100" target="_self">Book Now</a>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
         {
             Name = "Music Event: Music Concert by G.E.M",
             Description = "Experience the unstoppable power of G.E.M. live—heartfelt vocals, electrifying energy, and a night of music you'll never forget!",
-            Date = new DateTime(2025, 6, 18),
+            Date = new DateTime(2025, 12, 18),
             Link = "/register",
             Thumbnail = "images/G.E.M.jpg" // Image file name
         },
